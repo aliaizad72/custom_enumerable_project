@@ -15,21 +15,23 @@ module Enumerable
   end
 
   def my_select
-    if is_a? Array
-      selected = []
+    selected = if is_a? Array
+                 []
+               elsif is_a? Hash
+                 {}
+               end
 
+    if is_a? Array
       my_each do |n|
         selected.push(n) if yield n
       end
-
-      if selected.empty?
-        nil
-      else
-        selected
-      end
     elsif is_a? Hash
-      selected = {}
+      my_each do |key, value|
+        selected[key] = value if yield(key, value)
+      end
     end
+
+    selected
   end
 end
 
@@ -45,13 +47,13 @@ class Array
 
     while i < loop_times
       yield self[i]
-      i += 1
-    end
+      i += 1 end
 
     self
   end
 end
 
+# extending Hash
 class Hash
   def my_each
     loop_times = length
@@ -68,6 +70,5 @@ class Hash
   end
 end
 
-a = { one: 1, two: 2, three: 3 }
-p a.my_each { |k, v| p "#{k}: #{v}" }
-
+a = {one: 1, two: 2, three: 3}
+p a.my_select { |_k, v| v > 1 }
