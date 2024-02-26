@@ -15,23 +15,29 @@ module Enumerable
   end
 
   def my_select
-    selected = if is_a? Array
-                 []
-               elsif is_a? Hash
-                 {}
-               end
-
     if is_a? Array
+      selected = []
       my_each do |n|
         selected.push(n) if yield n
       end
     elsif is_a? Hash
+      selected = {}
       my_each do |key, value|
         selected[key] = value if yield(key, value)
       end
     end
 
     selected
+  end
+
+  def my_all?
+    test = []
+    my_each do |n|
+      test << yield(n)
+    end
+    return false if test.uniq.length > 1
+
+    test.uniq[0]
   end
 end
 
@@ -70,5 +76,3 @@ class Hash
   end
 end
 
-a = {one: 1, two: 2, three: 3}
-p a.my_select { |_k, v| v > 1 }
