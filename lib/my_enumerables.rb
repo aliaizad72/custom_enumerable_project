@@ -39,6 +39,22 @@ module Enumerable
 
     test.uniq[0]
   end
+
+  def my_any?
+    test = false
+    my_each do |n|
+      test = true if yield(n)
+    end
+    test
+  end
+
+  def my_none?
+    test = true
+    my_each do |n|
+      test = false if yield(n)
+    end
+    test
+  end
 end
 
 # You will first have to define my_each
