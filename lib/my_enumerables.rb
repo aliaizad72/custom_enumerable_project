@@ -55,6 +55,16 @@ module Enumerable
     end
     test
   end
+
+  def my_count
+    if block_given?
+      truthy = []
+      my_each { |n| truthy << true if yield(n) }
+      truthy.length
+    else
+      length
+    end
+  end
 end
 
 # You will first have to define my_each
