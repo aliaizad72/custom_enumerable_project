@@ -65,6 +65,12 @@ module Enumerable
       length
     end
   end
+
+  def my_map
+    mapped = []
+    my_each { |n| mapped << yield(n) }
+    mapped
+  end
 end
 
 # You will first have to define my_each
