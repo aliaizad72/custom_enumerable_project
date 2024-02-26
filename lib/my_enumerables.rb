@@ -18,7 +18,7 @@ module Enumerable
     if is_a? Array
       selected = []
       my_each do |n|
-        selected.push(n) if yield n
+        selected.push(n) if yield(n)
       end
     elsif is_a? Hash
       selected = {}
@@ -71,6 +71,21 @@ module Enumerable
     my_each { |n| mapped << yield(n) }
     mapped
   end
+
+  def my_inject(initial_operand = nil)
+    sum = if initial_operand.nil?
+            self[0]
+          else
+            initial_operand
+          end
+
+    my_each_with_index do |element, index|
+      next if initial_operand.nil? && index.zero?
+      sum = yield(sum, element)
+    end
+
+    sum
+  end
 end
 
 # You will first have to define my_each
@@ -108,3 +123,4 @@ class Hash
   end
 end
 
+p [1, 2, 3].my_inject() { |sum, n| sum + n }
